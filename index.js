@@ -30,13 +30,13 @@ client.connect(err => {
         const file = req.files.file;
         const title = req.body.title;
         const description = req.body.description;
-        const filePath = `${__dirname}/images/${file.name}`;
+        // const filePath = `${__dirname}/images/${file.name}`;
 
-        file.mv(filePath, err => {
-            if (err) {
-                res.status(500).send({ msg: "Failed to uploaded image" });
-            }
-            const newImg = fs.readFileSync(filePath);
+        // file.mv(filePath, err => {
+        //     if (err) {
+        //         res.status(500).send({ msg: "Failed to uploaded image" });
+        //     }
+            const newImg = file.data;
             const encodeImg = newImg.toString('base64');
             const image = {
                 contentType: file.mimetype,
@@ -46,15 +46,15 @@ client.connect(err => {
 
             serviceCollection.insertOne({ title, description, img:image })
             .then(result => {
-                fs.remove(filePath, err => {
-                    if(err){
-                     console.log(err);
-                     res.status(500).send({ msg: "Failed to uploaded image" });
-                    }
+                // fs.remove(filePath, err => {
+                //     if(err){
+                //      console.log(err);
+                //      res.status(500).send({ msg: "Failed to uploaded image" });
+                //     }
                     res.send(result.insertedCount > 0);
-                });
+                // });
             });
-        });
+        // });
     });
 
     app.get('/getAllService', (req, res) => {
